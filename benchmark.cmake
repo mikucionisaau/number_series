@@ -13,4 +13,4 @@ FetchContent_Declare(googlebenchmark
 FetchContent_MakeAvailable(googletest googlebenchmark)
 
 message(STATUS "!!! Benchmark comparison require python3 with `pip install scipy` !!!")
-set(benchmark_cmp "${googlebenchmark_SOURCE_DIR}/tools/compare.py")
+set(benchmark_cmp python3 ${googlebenchmark_SOURCE_DIR}/tools/compare.py)
