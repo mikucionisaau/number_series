@@ -20,14 +20,17 @@ In this assignment, you have to implement a data type (class) `number_series`, t
    - Perform the time measurements again.
    - How did they change?
 
-In your code, pay attention to use `const` whenever it makes sense (arguments, member functions). Pay attention to the correct use/not use of references/pointers/values. Compile without debug information for your time measurements.
+In your code, pay attention to use `const` whenever it makes sense (arguments, member functions). 
+Pay attention to the correct use/not use of references/pointers/values. 
+Compile optimized `Release` build without debug information for your time measurements.
 
 ## Unit Tests
 [test_number_series.cpp](test_number_series.cpp) includes unit tests to guide you through the implementation.
 
 ## Benchmarks
-[bm_sort.cpp](bm_sort.cpp) includes a sorting example demonstrating how to use Google Benchmark library.
-[bm_number_series.cpp](bm_number_series.cpp) your code for benchmarking the `number_series` and `number_series_wrap`.
+- [bm_sort.cpp](bm_sort.cpp) includes a sorting example demonstrating how to use Google Benchmark library.
+- [bm_number_series.cpp](bm_number_series.cpp) benchmarks the `number_series` and `number_series_wrap`.
+- [bm_make_random.cpp](bm_make_random.cpp) benchmarks 5 implementations of `number_series::make_random`.
 
 ## Libraries included
 - [doctest](https://github.com/doctest/doctest): unit test framework.

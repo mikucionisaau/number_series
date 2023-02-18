@@ -23,9 +23,13 @@ int main()
     vv.reserve(ns_number);  // preallocate memory
 
     // Populate the vv with data here
+    for (size_t i = 0; i < ns_number; ++i)
+        vv.push_back(number_series::make_random(ns_length));
+    for (auto& ns : vv)
+        ns += number_series::make_random(ns_length);
 
     auto t0 = clk::now();
-    // std::sort(vv.begin(), vv.end());
+    std::sort(vv.begin(), vv.end());
     auto t1 = clk::now();
     cout << "Sorting values: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 
@@ -35,9 +39,13 @@ int main()
     vw.reserve(ns_number);  // preallocate memory
 
     // Populate the vw with data here
+    for (size_t i = 0; i < ns_number; ++i)
+        vw.push_back(number_series_wrap::make_random(ns_length));
+    for (auto& ns : vw)
+        ns += number_series_wrap::make_random(ns_length);
 
     t0 = clk::now();
-    // std::sort(vw.begin(), vw.end());
+    std::sort(vw.begin(), vw.end());
     t1 = clk::now();
     cout << "Sorting wrapped pointers: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 

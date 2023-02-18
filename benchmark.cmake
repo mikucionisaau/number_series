@@ -11,3 +11,6 @@ FetchContent_Declare(googlebenchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
         GIT_TAG v1.7.1)              # or "master" for latest
 FetchContent_MakeAvailable(googletest googlebenchmark)
+
+message(STATUS "!!! Benchmark comparison require python3 with `pip install scipy` !!!")
+set(benchmark_cmp "${googlebenchmark_SOURCE_DIR}/tools/compare.py")

@@ -6,9 +6,11 @@ auto make_vv(size_t ns_number, size_t ns_length)
     using data_series::number_series;
     auto vv = std::vector<number_series>{};
     vv.reserve(ns_number);  // preallocate memory
-
     // populate vv with data here
-
+    for (size_t i = 0; i < ns_number; ++i)
+        vv.push_back(number_series::make_random(ns_length));
+    for (auto& ns : vv)
+        ns += number_series::make_random(ns_length);
     return vv;
 };
 
@@ -17,9 +19,11 @@ auto make_wrapper(size_t ns_number, size_t ns_length)
     using data_series::number_series_wrap;
     auto vw = std::vector<number_series_wrap>{};
     vw.reserve(ns_number);  // preallocate memory
-
     // populate vv with data here
-
+    for (size_t i = 0; i < ns_number; ++i)
+        vw.push_back(number_series_wrap::make_random(ns_length));
+    for (auto& ns : vw)
+        ns += number_series_wrap::make_random(ns_length);
     return vw;
 };
 
@@ -49,7 +53,7 @@ static void bm_ns_wrap_sort(benchmark::State& state)
         auto vw = input;
         state.ResumeTiming();
         // sort(vw.begin(), vw.end());
-        benchmark::DoNotOptimize(vw.data());  // tells compiler that vv.data() is useful
+        benchmark::DoNotOptimize(vw.data());  // tells compiler that vw.data() is useful
         benchmark::ClobberMemory();           // flush changes to memory
     }
 }
