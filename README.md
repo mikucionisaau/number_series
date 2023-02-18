@@ -1,4 +1,5 @@
 # Number Series, Wrapper and Benchmark
+![build](https://github.com/mikucionisaau/number_series/actions/workflows/build.yml/badge.svg?event=push)
 
 In this assignment, you have to implement a data type (class) `number_series`, to store a number series (just a sequence of integers).
 

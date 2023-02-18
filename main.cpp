@@ -3,8 +3,10 @@
  * Purpose: compare the performance of number_series and number_series_wrap.
  */
 #include "number_series.hpp"
+#include "number_series_wrap.hpp"
 
 #include <chrono>
+#include <algorithm>
 
 constexpr auto ns_number = 100'000;
 constexpr auto ns_length = 100;
@@ -22,10 +24,14 @@ int main()
     std::vector<number_series> vv;
     vv.reserve(ns_number);  // preallocate memory
 
-    // TODO: Populate the vv with data here
+    // Populate the vv with data here
+    for (size_t i = 0; i < ns_number; ++i)
+        vv.push_back(number_series::make_random(ns_length));
+    for (auto& ns : vv)
+        ns += number_series::make_random(ns_length);
 
     auto t0 = clk::now();
-    // TODO: std::sort(vv.begin(), vv.end());
+    std::sort(vv.begin(), vv.end());
     auto t1 = clk::now();
     cout << "Sorting values: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 
@@ -34,37 +40,47 @@ int main()
     auto vw = std::vector<number_series_wrap>{};
     vw.reserve(ns_number);  // preallocate memory
 
-    // TODO: Populate the vw with data here
+    // Populate the vw with data here
+    for (size_t i = 0; i < ns_number; ++i)
+        vw.push_back(number_series_wrap::make_random(ns_length));
+    for (auto& ns : vw)
+        ns += number_series_wrap::make_random(ns_length);
 
     t0 = clk::now();
-    // TODO: std::sort(vw.begin(), vw.end());
+    std::sort(vw.begin(), vw.end());
     t1 = clk::now();
     cout << "Sorting wrapped pointers: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 
-    cout << "sizeof(number_series): " << sizeof(number_series) << '\n';
+    cout << "sizeof(number_series): " << sizeof(number_series) << " bytes\n";
 }
 
 /**
 Important: measure the optimized ("Release") build!
 
+ My expectation: some slowdown in number_series_wrap due to extra pointer lookup,
+ but difficult to guess how much in relation to copying operations in sorting.
+
 Sample result:
 
-Sorting values: XXX ms
-Sorting wrapped pointers: YYY ms
-sizeof(number_series): ZZZ
+Sorting values: 6.43198 ms
+Sorting wrapped pointers: 23.9614 ms
+sizeof(number_series): 32 bytes
 
 Interpretation:
 
-Part 3 is about XX% ****er than Part 2.
-PUT YOUR CONCLUSION HERE
+Part 3 is about 272% slower than Part 2.
+Indirection introduces significant overhead.
 
-Sample result, if number_series is padded with array:
+Sample result, if number_series is padded with array of 72 ints:
 
-Sorting values: XXX ms
-Sorting wrapped pointers: YYY ms
-sizeof(number_series): ZZZ
+Sorting values: 34.9439 ms
+Sorting wrapped pointers: 27.854 ms
+sizeof(number_series): 320 bytes
 
-Part 3 is about XX% ****er than Part 2.
-PUT YOUR CONCLUSION HERE
+Part 3 is about 20% faster than Part 2.
+Padded number_series has a larger memory footprint and thus swap operations become dominant when sorting,
+slower than simple pointer swap.
+
+See bm_number_series for more precise measurements.
 
 */

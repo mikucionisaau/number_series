@@ -1,17 +1,13 @@
-/// Created by Marius Mikucionis <marius@cs.aau.dk>
+#include "number_series_wrap3.h"
 
-/** Unit tests for number_series */
-
-#include "number_series.hpp"
-
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-using namespace data_series;
+/// number_series_wrap3 class
 
-/// number_series class
-TEST_CASE("NS: Maintain minimum and maximum values")
+TEST_CASE("NSW3: Maintain minimum and maximum values")
 {
-    using series = number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series{};
     ns.add_value(10);
     CHECK(ns.get_min() == 10);
@@ -42,9 +38,9 @@ TEST_CASE("NS: Maintain minimum and maximum values")
     }
 }
 
-TEST_CASE("NS: Special members: ctors, dtor, assignment")
+TEST_CASE("NSW3: Special members: ctors, dtor, assignment")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series{11, 3, 7};
     CHECK(ns.size() == 3);
     CHECK(ns.get_min() == 3);
@@ -79,10 +75,7 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(copy.size() == 3);    // identical to old ns value
         CHECK(copy.get_min() == 3);
         CHECK(copy.get_max() == 11);
-        // Use after move (meaningless and dangerous):
         CHECK(ns.size() == 0);  // something else, but still a valid state
-        ns = {};                // reinitialize after move for safe reuse
-        CHECK(ns.size() == 0);  // OK, also deterministic.
     }
     SUBCASE("Move assign")
     {
@@ -94,23 +87,24 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(other.size() == 3);  // identical to old ns value
         CHECK(other.get_min() == 3);
         CHECK(other.get_max() == 11);
-        // Use after move (meaningless and dangerous):
         CHECK(ns.size() == 0);  // something else, but still a valid state
+        // Use after move (meaningless and dangerous):
+        CHECK(ns.size() == 0);  // your implementation may differ or even crash
         ns = {};                // reinitialize after move for safe reuse
         CHECK(ns.size() == 0);  // OK, also deterministic.
     }
 }
 
-TEST_CASE("NS: Class should have a static factory method")
+TEST_CASE("NSW3: Class should have a static factory method")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series::make_random(4);
     CHECK(ns.size() == 4);
 }
 
-TEST_CASE("NS: operator+ and operator+= over number series")
+TEST_CASE("NSW2: operator+ and operator+= over number series")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns1 = series::make_random(2);
     CHECK(ns1.size() == 2);
     auto ns2 = series::make_random(3);
@@ -127,9 +121,9 @@ TEST_CASE("NS: operator+ and operator+= over number series")
     CHECK(ns3.size() == 4);
 }
 
-TEST_CASE("NS: operator< using amplitudes")
+TEST_CASE("NSW3: operator< using amplitudes")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns1 = series{6, 3, 9};
     CHECK(ns1.amplitude() == 6);
     auto ns2 = series{24, 21, 22};
@@ -177,63 +171,3 @@ TEST_CASE("Test move behavior of std::vector")
         // 3) v has been put into a valid state
     }
 }
-
-/* TODO: uncomment one test at a time, then implement it
-TEST_CASE("Special members: ctors, dtor, assignment")
-{
-    const auto ns1 = number_series_wrap{11, 3, 7};
-    CHECK(ns1.size() == 3);
-    CHECK(ns1.get_min() == 3);
-    CHECK(ns1.get_max() == 11);
-    auto ns2 = number_series_wrap{27, 20, 33, 23};
-    CHECK(ns2.size() == 4);
-    CHECK(ns2.get_min() == 20);
-    CHECK(ns2.get_max() == 33);
-    auto ns3 = ns1;
-    CHECK(ns3.size() == 3);
-    CHECK(ns3.get_min() == 3);
-    CHECK(ns3.get_max() == 11);
-    ns2 = std::move(ns3);
-    CHECK(ns2.size() == 3);
-    CHECK(ns2.get_min() == 3);
-    CHECK(ns2.get_max() == 11);
-    CHECK(ns3.size() == 0); // your implementation may differ
-}
-*/
-/* TODO: uncomment one test at a time, then implement it
-TEST_CASE("Class should have a static factory method")
-{
-    auto ns = number_series::make_random(4);
-    CHECK(ns.size() == 4);
-}
-*/
-/* TODO: uncomment one test at a time, then implement it
-TEST_CASE("operator+ and operator+= over number series")
-{
-    auto ns1 = number_series_wrap::make_random(2);
-    CHECK(ns1.size() == 2);
-    auto ns2 = number_series_wrap::make_random(3);
-    CHECK(ns2.size() == 3);
-    auto ns3 = ns1 + ns2;
-    CHECK(ns1.size() == 2);
-    CHECK(ns2.size() == 3);
-    CHECK(ns3.size() == 3);
-    ns2.add_value(10);
-    CHECK(ns2.size() == 4);
-    (ns3 += ns1) += ns2;
-    CHECK(ns1.size() == 2);
-    CHECK(ns2.size() == 4);
-    CHECK(ns3.size() == 4);
-}
-*/
-
-/* TODO: uncomment one test at a time, then implement it
-TEST_CASE("operator< using amplitudes")
-{
-    auto ns1 = number_series_wrap{6, 3, 9};
-    CHECK(ns1.amplitude() == 6);
-    auto ns2 = number_series_wrap{24, 21, 22};
-    CHECK(ns2.amplitude() == 3);
-    CHECK(ns2 < ns1);
-}
-*/
