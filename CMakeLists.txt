@@ -15,6 +15,7 @@ include(benchmark.cmake)
 enable_testing()
 
 add_executable(main main.cpp number_series.cpp number_series.h)
+add_test(NAME main COMMAND main)
 
 add_executable(test_number_series test_number_series.cpp number_series.cpp number_series.h)
 target_link_libraries(test_number_series PRIVATE doctest::doctest)
@@ -46,6 +47,7 @@ add_test(NAME bm_make_random_2_5 COMMAND ${benchmark_cmp} filters ./bm_make_rand
 
 # Run benchmarks sequentially so that they do not interfere with others
 set_tests_properties(
+        main
         bm_sort
         bm_number_series
         bm_ns_vs_wrap
