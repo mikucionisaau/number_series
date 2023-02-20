@@ -2,6 +2,7 @@
  * Purpose: compare the performance of number_series and number_series_wrap.
  */
 #include "number_series.h"
+#include "number_series_wrap.h"
 
 #include <chrono>
 #include <algorithm>
@@ -49,30 +50,36 @@ int main()
     t1 = clk::now();
     cout << "Sorting wrapped pointers: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 
-    cout << "sizeof(number_series): " << sizeof(number_series) << '\n';
+    cout << "sizeof(number_series): " << sizeof(number_series) << " bytes\n";
 }
 
 /**
 Important: measure the optimized ("Release") build!
 
+ My expectation: some slowdown in number_series_wrap due to extra pointer lookup,
+ but difficult to guess how much in relation to copying operations in sorting.
+
 Sample result:
 
-Sorting values: XXX ms
-Sorting wrapped pointers: YYY ms
-sizeof(number_series): ZZZ
+Sorting values: 6.43198 ms
+Sorting wrapped pointers: 23.9614 ms
+sizeof(number_series): 32 bytes
 
 Interpretation:
 
-Part 3 is about XX% ****er than Part 2.
-PUT YOUR CONCLUSION HERE
+Part 3 is about 272% slower than Part 2.
+Indirection introduces significant overhead.
 
-Sample result, if number_series is padded with array:
+Sample result, if number_series is padded with array of 72 ints:
 
-Sorting values: XXX ms
-Sorting wrapped pointers: YYY ms
-sizeof(number_series): ZZZ
+Sorting values: 34.9439 ms
+Sorting wrapped pointers: 27.854 ms
+sizeof(number_series): 320 bytes
 
-Part 3 is about XX% ****er than Part 2.
-PUT YOUR CONCLUSION HERE
+Part 3 is about 20% faster than Part 2.
+Padded number_series has a larger memory footprint and thus swap operations become dominant when sorting,
+slower than simple pointer swap.
+
+See bm_number_series for more precise measurements.
 
 */

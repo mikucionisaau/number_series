@@ -1,12 +1,13 @@
-#include "number_series.h"
+#include "number_series_wrap3.h"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-/// number_series class
-TEST_CASE("NS: Maintain minimum and maximum values")
+/// number_series_wrap3 class
+
+TEST_CASE("NSW3: Maintain minimum and maximum values")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series{};
     ns.add_value(10);
     CHECK(ns.get_min() == 10);
@@ -37,9 +38,9 @@ TEST_CASE("NS: Maintain minimum and maximum values")
     }
 }
 
-TEST_CASE("NS: Special members: ctors, dtor, assignment")
+TEST_CASE("NSW3: Special members: ctors, dtor, assignment")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series{11, 3, 7};
     CHECK(ns.size() == 3);
     CHECK(ns.get_min() == 3);
@@ -74,10 +75,7 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(copy.size() == 3);    // identical to old ns value
         CHECK(copy.get_min() == 3);
         CHECK(copy.get_max() == 11);
-        // Use after move (meaningless and dangerous):
         CHECK(ns.size() == 0);  // something else, but still a valid state
-        ns = {};                // reinitialize after move for safe reuse
-        CHECK(ns.size() == 0);  // OK, also deterministic.
     }
     SUBCASE("Move assign")
     {
@@ -89,23 +87,24 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(other.size() == 3);  // identical to old ns value
         CHECK(other.get_min() == 3);
         CHECK(other.get_max() == 11);
-        // Use after move (meaningless and dangerous):
         CHECK(ns.size() == 0);  // something else, but still a valid state
+        // Use after move (meaningless and dangerous):
+        CHECK(ns.size() == 0);  // your implementation may differ or even crash
         ns = {};                // reinitialize after move for safe reuse
         CHECK(ns.size() == 0);  // OK, also deterministic.
     }
 }
 
-TEST_CASE("NS: Class should have a static factory method")
+TEST_CASE("NSW3: Class should have a static factory method")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns = series::make_random(4);
     CHECK(ns.size() == 4);
 }
 
-TEST_CASE("NS: operator+ and operator+= over number series")
+TEST_CASE("NSW2: operator+ and operator+= over number series")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns1 = series::make_random(2);
     CHECK(ns1.size() == 2);
     auto ns2 = series::make_random(3);
@@ -122,9 +121,9 @@ TEST_CASE("NS: operator+ and operator+= over number series")
     CHECK(ns3.size() == 4);
 }
 
-TEST_CASE("NS: operator< using amplitudes")
+TEST_CASE("NSW3: operator< using amplitudes")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap3;
     auto ns1 = series{6, 3, 9};
     CHECK(ns1.amplitude() == 6);
     auto ns2 = series{24, 21, 22};
