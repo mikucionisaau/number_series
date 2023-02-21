@@ -134,13 +134,57 @@ OVERALL_GEOMEAN                              +1.7062  +1.7064         0         
 Interpretation: number_series 18.402147ms, number_series_wrap 49.799978ms
 sort of number_series_wrap is 170% slower than number_series.
 
-Sample output comparison (bm_ns_vs_wrap) with padding:
-Benchmark                                       Time      CPU  Time Old  Time New   CPU Old   CPU New
------------------------------------------------------------------------------------------------------
-[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100  -0.2084  -0.2084  74110795  58663856  74106409  58661904
-OVERALL_GEOMEAN                              -0.2084  -0.2084         0         0         0         0
+Sample output comparison (bm_ns_vs_wrap) with padding of 100 integers:
+GCC-12 on Ubuntu 22.04, 2 x 2593.91 MHz CPUs
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   -0.0708  -0.0707        64        59       64       59
+OVERALL_GEOMEAN                               -0.0708  -0.0707         0         0        0        0
 
-Interpretation: number_series 74.110795ms, number_series_wrap 58.663856ms
-sort of number_series_wrap is 20.8% faster than padded number_series.
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  -0.2489  -0.2489        63        47       63       47
+OVERALL_GEOMEAN                               -0.2489  -0.2489         0         0        0        0
+
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  -0.1719  -0.1719        63        52       63       52
+OVERALL_GEOMEAN                               -0.1719  -0.1719         0         0        0        0
+
+Interpretation:
+number_series_wrap, number_series_wrap2 and number_series_wrap3 are faster than plain number_series.
+number_series_wrap2 has the best performance (faster than number_series by 24.89%).
+
+macOS, Homebrew GCC-12 on 3 x 2574 MHz CPUs
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +0.8013  +0.8019       122       220      122      220
+OVERALL_GEOMEAN                               +0.8013  +0.8019         0         0        0        0
+
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  +0.3323  +0.3326       120       160      120      160
+OVERALL_GEOMEAN                               +0.3323  +0.3326         0         0        0        0
+
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  +0.3619  +0.3621       119       162      119      162
+OVERALL_GEOMEAN                               +0.3619  +0.3621         0         0        0        0
+
+Windows, MSVC on 2 x 2627.32 MHz CPUs
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +0.0169  +0.0192       127       129      127      130
+OVERALL_GEOMEAN                               +0.0169  +0.0192         0         0        0        0
+
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  -0.4605  -0.4610       130        70      130       70
+OVERALL_GEOMEAN                               -0.4605  -0.4610         0         0        0        0
+
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  -0.4364  -0.4404       134        76      135       75
+OVERALL_GEOMEAN                               -0.4364  -0.4404         0         0        0        0
 
  */

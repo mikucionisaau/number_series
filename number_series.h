@@ -63,7 +63,7 @@ namespace data_series
             max_value = std::max(max_value, v);
         }
         void update_min_max();  ///< recompute min/max from scratch
-        int padding[100]{};     // experiment with sort performance
+        // int padding[100]{};     // experiment with sort performance
     };
     /// Compares two series by their amplitude:
     inline bool operator<(const number_series& lhs, const number_series& rhs)
