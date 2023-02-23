@@ -1,12 +1,13 @@
-#include "number_series.h"
+#include "number_series_wrap.h"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-/// number_series class
-TEST_CASE("NS: Maintain minimum and maximum values")
+/// number_series_wrap class
+
+TEST_CASE("NSW: Maintain minimum and maximum values")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap;
     auto ns = series{};
     ns.add_value(10);
     CHECK(ns.get_min() == 10);
@@ -37,9 +38,9 @@ TEST_CASE("NS: Maintain minimum and maximum values")
     }
 }
 
-TEST_CASE("NS: Special members: ctors, dtor, assignment")
+TEST_CASE("NSW: Special members: ctors, dtor, assignment")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap;
     auto ns = series{11, 3, 7};
     CHECK(ns.size() == 3);
     CHECK(ns.get_min() == 3);
@@ -75,7 +76,7 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(copy.get_min() == 3);
         CHECK(copy.get_max() == 11);
         // Use after move (meaningless and dangerous):
-        CHECK(ns.size() == 0);  // something else, but still a valid state
+        CHECK(ns.size() == 0);  // your implementation may differ or even crash
         ns = {};                // reinitialize after move for safe reuse
         CHECK(ns.size() == 0);  // OK, also deterministic.
     }
@@ -90,22 +91,22 @@ TEST_CASE("NS: Special members: ctors, dtor, assignment")
         CHECK(other.get_min() == 3);
         CHECK(other.get_max() == 11);
         // Use after move (meaningless and dangerous):
-        CHECK(ns.size() == 0);  // something else, but still a valid state
+        CHECK(ns.size() == 4);  // your implementation may differ or even crash
         ns = {};                // reinitialize after move for safe reuse
         CHECK(ns.size() == 0);  // OK, also deterministic.
     }
 }
 
-TEST_CASE("NS: Class should have a static factory method")
+TEST_CASE("NSW: Class should have a static factory method")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap;
     auto ns = series::make_random(4);
     CHECK(ns.size() == 4);
 }
 
-TEST_CASE("NS: operator+ and operator+= over number series")
+TEST_CASE("NSW: operator+ and operator+= over number series")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap;
     auto ns1 = series::make_random(2);
     CHECK(ns1.size() == 2);
     auto ns2 = series::make_random(3);
@@ -122,53 +123,12 @@ TEST_CASE("NS: operator+ and operator+= over number series")
     CHECK(ns3.size() == 4);
 }
 
-TEST_CASE("NS: operator< using amplitudes")
+TEST_CASE("NSW: operator< using amplitudes")
 {
-    using series = data_series::number_series;
+    using series = data_series::number_series_wrap;
     auto ns1 = series{6, 3, 9};
     CHECK(ns1.amplitude() == 6);
     auto ns2 = series{24, 21, 22};
     CHECK(ns2.amplitude() == 3);
     CHECK(ns2 < ns1);
-}
-
-TEST_CASE("Test move behavior of std::vector")
-{
-    auto v = std::vector{1, 2, 3};
-    REQUIRE(v.size() == 3);  // stop the test if this condition fails (protects against potential crash below)
-    CHECK(v[0] == 1);        // crash if v.empty()
-    CHECK(v[1] == 2);
-    CHECK(v[2] == 3);
-    CHECK(v.capacity() == 3);
-    SUBCASE("Move construct")
-    {
-        auto u = std::move(v);   // move-construct
-        REQUIRE(u.size() == 3);  // protect against potential crash below
-        CHECK(u[0] == 1);        // crash if u.empty()
-        CHECK(u[1] == 2);
-        CHECK(u[2] == 3);
-        CHECK(u.capacity() == 3);
-        REQUIRE(v.size() == 0);    // your implementation may be different
-        CHECK(v.capacity() == 0);  // your implementation may be different
-    }
-    SUBCASE("Move assign")
-    {
-        auto u = std::vector{3, 4};
-        REQUIRE(u.size() == 2);
-        CHECK(u[0] == 3);
-        CHECK(u[1] == 4);
-        CHECK(u.capacity() == 2);
-        u = std::move(v);
-        REQUIRE(u.size() == 3);
-        CHECK(u[0] == 1);
-        CHECK(u[1] == 2);
-        CHECK(u[2] == 3);
-        CHECK(u.capacity() == 3);
-        REQUIRE(v.size() == 0);    // your implementation may differ(!)
-        CHECK(v.capacity() == 0);  // your implementation may differ(!)
-        // if the above passes, then it means that during move:
-        // 1) initial v2 resources were released (not swapped)
-        // 2) resources of v have been moved into v2
-        // 3) v has been put into a valid state
-    }
 }
