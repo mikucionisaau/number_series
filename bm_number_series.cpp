@@ -124,67 +124,63 @@ BENCHMARK(bm_ns_wrap3_sort)->ArgPair(100'000, 100);
 BENCHMARK_MAIN();
 
 /*
-
+=== Benchmarks with padding ===
 Sample output comparison (bm_ns_vs_wrap) without padding:
-Benchmark                                       Time      CPU  Time Old  Time New   CPU Old   CPU New
------------------------------------------------------------------------------------------------------
-[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100  +1.7062  +1.7064  18402147  49799978  18400028  49797757
-OVERALL_GEOMEAN                              +1.7062  +1.7064         0         0         0         0
+https://github.com/mikucionisaau/number_series/actions/runs/4229495319/jobs/7345922364
+GCC-12 on Ubuntu 22.04, 2 x 2793.44 MHz CPUs:
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +1.1537  +1.1534        19        41       19       41
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  +0.6075  +0.6075        19        30       19       30
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  +0.6704  +0.6704        19        31       19       31
 
-Interpretation: number_series 18.402147ms, number_series_wrap 49.799978ms
-sort of number_series_wrap is 170% slower than number_series.
+Interpretation: number_series 19, number_series_wrap 41ms
+sort of number_series_wrap is 115% slower than number_series.
 
+https://github.com/mikucionisaau/number_series/actions/runs/4229495319/jobs/7345922443
+macOS, homebrew GCC-12 on 3 x 3337 MHz CPUs:
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +0.5463  +0.6560        81       125       75      123
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  +0.1314  +0.1185       108       122       90      101
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  +0.0878  +0.1435       101       110       83       94
+
+https://github.com/mikucionisaau/number_series/actions/runs/4229495319/jobs/7345922513
+Windows, MSVC on 2 x 2818.9 MHz CPUs:
+Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
+----------------------------------------------------------------------------------------------------
+[bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +2.3589  +2.3793        26        86       26       86
+[bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  +0.5438  +0.5722        26        40       26       40
+[bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  +0.6570  +0.6758        26        43       25       43
+
+=== Benchmarks with padding ===
 Sample output comparison (bm_ns_vs_wrap) with padding of 100 integers:
-GCC-12 on Ubuntu 22.04, 2 x 2593.91 MHz CPUs
+https://github.com/mikucionisaau/number_series/actions/runs/4222606513/jobs/7331312313
+GCC-12 on Ubuntu 22.04, 2 x 2593.91 MHz CPUs:
 Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
 ----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   -0.0708  -0.0707        64        59       64       59
-OVERALL_GEOMEAN                               -0.0708  -0.0707         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  -0.2489  -0.2489        63        47       63       47
-OVERALL_GEOMEAN                               -0.2489  -0.2489         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  -0.1719  -0.1719        63        52       63       52
-OVERALL_GEOMEAN                               -0.1719  -0.1719         0         0        0        0
 
 Interpretation:
 number_series_wrap, number_series_wrap2 and number_series_wrap3 are faster than plain number_series.
 number_series_wrap2 has the best performance (faster than number_series by 24.89%).
 
-macOS, Homebrew GCC-12 on 3 x 2574 MHz CPUs
+https://github.com/mikucionisaau/number_series/actions/runs/4222606513/jobs/7331312447
+macOS, Homebrew GCC-12 on 3 x 2574 MHz CPUs:
 Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
 ----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +0.8013  +0.8019       122       220      122      220
-OVERALL_GEOMEAN                               +0.8013  +0.8019         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  +0.3323  +0.3326       120       160      120      160
-OVERALL_GEOMEAN                               +0.3323  +0.3326         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  +0.3619  +0.3621       119       162      119      162
-OVERALL_GEOMEAN                               +0.3619  +0.3621         0         0        0        0
 
-Windows, MSVC on 2 x 2627.32 MHz CPUs
+https://github.com/mikucionisaau/number_series/actions/runs/4222606513/jobs/7331312658
+Windows, MSVC on 2 x 2627.32 MHz CPUs:
 Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
 ----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap_sort]/100000/100   +0.0169  +0.0192       127       129      127      130
-OVERALL_GEOMEAN                               +0.0169  +0.0192         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap2_sort]/100000/100  -0.4605  -0.4610       130        70      130       70
-OVERALL_GEOMEAN                               -0.4605  -0.4610         0         0        0        0
-
-Benchmark                                        Time      CPU  Time Old  Time New  CPU Old  CPU New
-----------------------------------------------------------------------------------------------------
 [bm_ns_sort vs. bm_ns_wrap3_sort]/100000/100  -0.4364  -0.4404       134        76      135       75
-OVERALL_GEOMEAN                               -0.4364  -0.4404         0         0        0        0
 
  */
