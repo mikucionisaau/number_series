@@ -1,10 +1,10 @@
+/// Created by Marius Mikucionis <marius@cs.aau.dk>
 /**
  * Purpose: compare the performance of number_series and number_series_wrap.
  */
-#include "number_series.h"
+#include "number_series.hpp"
 
 #include <chrono>
-#include <algorithm>
 
 constexpr auto ns_number = 100'000;
 constexpr auto ns_length = 100;
@@ -22,10 +22,10 @@ int main()
     std::vector<number_series> vv;
     vv.reserve(ns_number);  // preallocate memory
 
-    // Populate the vv with data here
+    // TODO: Populate the vv with data here
 
     auto t0 = clk::now();
-    // std::sort(vv.begin(), vv.end());
+    // TODO: std::sort(vv.begin(), vv.end());
     auto t1 = clk::now();
     cout << "Sorting values: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 
@@ -34,10 +34,10 @@ int main()
     auto vw = std::vector<number_series_wrap>{};
     vw.reserve(ns_number);  // preallocate memory
 
-    // Populate the vw with data here
+    // TODO: Populate the vw with data here
 
     t0 = clk::now();
-    // std::sort(vw.begin(), vw.end());
+    // TODO: std::sort(vw.begin(), vw.end());
     t1 = clk::now();
     cout << "Sorting wrapped pointers: " << duration<double, milli>(t1 - t0).count() << " ms\n";
 

@@ -1,3 +1,5 @@
+/// Created by Marius Mikucionis <marius@cs.aau.dk>
+
 #include <benchmark/benchmark.h>
 #include <random>
 
@@ -25,5 +27,3 @@ static void bm_sort(benchmark::State& state)
     }
 }
 BENCHMARK(bm_sort)->ArgPair(100, 100)->ArgPair(1'000, 100)->ArgPair(10'000, 100)->ArgPair(100'000, 100);
-
-BENCHMARK_MAIN();

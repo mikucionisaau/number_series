@@ -14,16 +14,17 @@ include(benchmark.cmake)
 
 enable_testing()
 
-add_executable(main main.cpp number_series.cpp number_series.h)
+add_executable(main main.cpp number_series.cpp number_series.hpp)
+add_test(NAME main COMMAND main)
 
-add_executable(test_number_series test_number_series.cpp number_series.cpp number_series.h)
-target_link_libraries(test_number_series PRIVATE doctest::doctest)
-add_test(NAME test_number_series COMMAND test_number_series)
+add_executable(number_series_test number_series_test.cpp number_series.cpp number_series.hpp)
+target_link_libraries(number_series_test PRIVATE doctest::doctest_with_main)
+add_test(NAME number_series_test COMMAND number_series_test)
 
-add_executable(bm_sort bm_sort.cpp)
-target_link_libraries(bm_sort PRIVATE benchmark::benchmark)
-add_test(NAME bm_sort COMMAND bm_sort)
+add_executable(sort_bm sort_bm.cpp)
+target_link_libraries(sort_bm PRIVATE benchmark::benchmark_main)
+add_test(NAME sort_bm COMMAND sort_bm)
 
-add_executable(bm_number_series bm_number_series.cpp number_series.cpp number_series.h)
-target_link_libraries(bm_number_series PRIVATE benchmark::benchmark)
-add_test(NAME bm_number_series COMMAND bm_number_series)
+add_executable(number_series_bm number_series_bm.cpp number_series.cpp number_series.hpp)
+target_link_libraries(number_series_bm PRIVATE benchmark::benchmark_main)
+add_test(NAME number_series_bm COMMAND number_series_bm)
